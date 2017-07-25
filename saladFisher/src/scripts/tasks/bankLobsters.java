@@ -28,6 +28,8 @@ public class bankLobsters implements Task {
 
     @Override
     public void execute() {
+        General.sleep(1000,6000);
+
         if (!Banking.isInBank()) {
             if (WebWalker.walkToBank()) {
 
@@ -41,9 +43,10 @@ public class bankLobsters implements Task {
             }
         }
 
-        Banking.openBank();
-        Banking.depositAllExcept("Lobster pot");
-        Banking.close();
+        if (Banking.openBank())
+            Banking.depositAllExcept("Lobster pot");
+
+            //Banking.close();
     }
 
     @Override

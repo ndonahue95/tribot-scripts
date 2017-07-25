@@ -41,10 +41,6 @@ public class fishLobsters implements Task {
 
     @Override
     public void execute() {
-        if (lastABTime != 0) {
-            AntiBan.sleepReactionTime();
-        }
-
         if (Player.getAnimation() == -1) {
             if (Banking.isInBank()) {
                 if (WebWalker.walkTo(fishSpot1.getRandomTile())) {
@@ -54,7 +50,7 @@ public class fishLobsters implements Task {
                         public boolean active() {
                             General.sleep(100, 250);
                             saladFisher.status = "Walking from bank.";
-                            return NPCs.findNearest(FISHING_ID).length > 0 && NPCs.findNearest(FISHING_ID)[0].isClickable();
+                            return NPCs.findNearest(FISHING_ID).length > 0;
                         }
                     }, General.random(15000, 22000));
 
@@ -67,22 +63,29 @@ public class fishLobsters implements Task {
                 RSNPC toFishAt = AntiBan.selectNextTarget(fishSpots);
 
                 if (toFishAt.isClickable()) {
-                    Clicking.click("Cage", toFishAt);
 
-                    lastABTime = Timing.currentTimeMillis();
+                    if (lastABTime != 0) {
+                        AntiBan.sleepReactionTime();
+                    }
 
-                    General.sleep(2000, 3000);
+                    if (Clicking.click("Cage", toFishAt)) {
 
-                    Timing.waitCondition(new Condition() {
-                        @Override
-                        public boolean active() {
-                            General.sleep(100, 250);
-                            saladFisher.status = "Fishing antiban.";
-                            AntiBan.timedActions();
-                            return (Player.getRSPlayer().getInteractingCharacter() == null
-                                    || Player.getRSPlayer().getInteractingCharacter() != null && Player.getAnimation() == -1);
-                        }
-                    }, General.random(100000, 200000));
+                        lastABTime = Timing.currentTimeMillis();
+
+                        General.sleep(2000, 3000);
+
+                        Timing.waitCondition(new Condition() {
+                            @Override
+                            public boolean active() {
+                                General.sleep(100, 250);
+                                saladFisher.status = "Fishing antiban.";
+                                AntiBan.timedActions();
+                                return (Player.getRSPlayer().getInteractingCharacter() == null
+                                        || Player.getRSPlayer().getInteractingCharacter() != null && Player.getAnimation() == -1);
+                            }
+                        }, General.random(100000, 200000));
+
+                    }
 
                 } else {
                     Camera.turnToTile(toFishAt.getPosition());
@@ -97,6 +100,10 @@ public class fishLobsters implements Task {
                                 return toFishAt.isClickable();
                             }
                         }, General.random(5000, 8000));
+
+                        if (lastABTime != 0) {
+                            AntiBan.sleepReactionTime();
+                        }
 
                         if (Clicking.click("Cage", toFishAt)) {
 
