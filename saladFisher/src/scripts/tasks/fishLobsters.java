@@ -68,6 +68,8 @@ public class fishLobsters implements Task {
                         AntiBan.sleepReactionTime();
                     }
 
+                    lastABTime = 0;
+
                     if (Clicking.click("Cage", toFishAt)) {
 
                         lastABTime = Timing.currentTimeMillis();
@@ -80,6 +82,13 @@ public class fishLobsters implements Task {
                                 General.sleep(100, 250);
                                 saladFisher.status = "Fishing antiban.";
                                 AntiBan.timedActions();
+
+                                // track lobbies
+                                if (Skills.getXP(Skills.SKILLS.FISHING) - saladFisher.xp_fishing > 0) {
+                                    saladFisher.xp_fishing = Skills.getXP(Skills.SKILLS.FISHING);
+                                    saladFisher._caught++;
+                                }
+
                                 return (Player.getRSPlayer().getInteractingCharacter() == null
                                         || Player.getRSPlayer().getInteractingCharacter() != null && Player.getAnimation() == -1);
                             }
@@ -105,6 +114,8 @@ public class fishLobsters implements Task {
                             AntiBan.sleepReactionTime();
                         }
 
+                        lastABTime = 0;
+
                         if (Clicking.click("Cage", toFishAt)) {
 
                             lastABTime = Timing.currentTimeMillis();
@@ -117,6 +128,13 @@ public class fishLobsters implements Task {
                                     General.sleep(100, 250);
                                     saladFisher.status = "Fishing antiban.";
                                     AntiBan.timedActions();
+
+                                    // track lobbies
+                                    if (Skills.getXP(Skills.SKILLS.FISHING) - saladFisher.xp_fishing > 0) {
+                                        saladFisher.xp_fishing = Skills.getXP(Skills.SKILLS.FISHING);
+                                        saladFisher._caught++;
+                                    }
+
                                     return (Player.getRSPlayer().getInteractingCharacter() == null
                                             || Player.getRSPlayer().getInteractingCharacter() != null && Player.getAnimation() == -1);
                                 }
